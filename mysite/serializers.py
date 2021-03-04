@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Company
+from .models import Company, Advertisement
 
 
 class CompanySerializer(serializers.ModelSerializer):
@@ -22,5 +22,23 @@ class CompanyCreateSerializer(serializers.ModelSerializer):
 
 class CompanyDetailSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Company
+        model = Advertisement
         fields = ('owner', 'company_name', 'logo', 'address', 'phone', 'info', 'id')
+
+
+class AdvertisementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Advertisement
+        fields = ('company', 'title', 'body', 'image', 'created_at', 'id')
+
+
+class AdvertisementCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Advertisement
+        fields = ('title', 'body', 'image', 'company')
+
+
+class AdvertisementDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Advertisement
+        fields = ('company', 'title', 'body', 'image', 'created_at', 'id')
