@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from my_user.models import User
 
 
 class Company(models.Model):
@@ -24,10 +25,18 @@ class Advertisement(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     body = models.TextField()
-    image = models.ImageField(upload_to='ad_images', null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.title} - by {self.company}"
 
 
+class AdImage(models.Model):
+    image = models.ImageField(upload_to='adds')
+    advertisement = models.ForeignKey(Advertisement, related_name='images', on_delete=models.CASCADE)
+    description = models.CharField(max_length=55)
+
+    def __str__(self):
+        if self.image:
+            return self.image.url
+        return ''

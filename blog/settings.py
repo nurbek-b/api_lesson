@@ -18,6 +18,9 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+AUTH_USER_MODEL = 'my_user.User'
+
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -26,10 +29,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     # third packages
     'rest_framework',
     'django_filters',
+
     # my packages
+    'my_user',
     'mysite',
 ]
 
@@ -110,6 +116,9 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 # Static files (CSS, JavaScript, Images)

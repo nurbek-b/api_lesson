@@ -1,6 +1,12 @@
-from django.urls import path
+from django.urls import path, include
 from .views import (CompanyView, CompanyCreate, CompanyDetail,
-                    AdView, AdCreate, AdDetail)
+                    AdView, AdCreate, AdDetail, AdUpdate, ImageViewSet)
+
+from rest_framework.routers import DefaultRouter
+
+
+router = DefaultRouter()
+router.register('image', ImageViewSet)
 
 
 urlpatterns = [
@@ -12,4 +18,7 @@ urlpatterns = [
     path('ad/list/', AdView.as_view(), name='ad_list'),
     path('ad/create/', AdCreate.as_view(), name='ad_create'),
     path('ad/<int:pk>/', AdDetail.as_view(), name='ad_detail'),
+    path('ad/<int:pk>/update/', AdUpdate.as_view(), name='ad_update'),
+    # Image router
+    path('', include(router.urls)),
 ]
