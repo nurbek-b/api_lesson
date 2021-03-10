@@ -1,13 +1,16 @@
 from .models import User
 from rest_framework import decorators, response, status
 from rest_framework.renderers import JSONRenderer
-from .serializers import UserCreateSerializer
+from .serializers import UserCreateSerializer, UserEditSerializer
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
 from .token import account_activation_token
 from django.core.mail import EmailMultiAlternatives
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import generics, permissions
+
 
 
 @decorators.api_view(['POST'])
@@ -35,7 +38,7 @@ def register(request):
                              status.HTTP_201_CREATED)
 
 
-@decorators.api_view(['POST'])
+@decorators.api_view(['POST', 'GET'])
 @decorators.renderer_classes([JSONRenderer])
 def activate(request, uidb64, token):
     try:
@@ -46,6 +49,22 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        return response.Response('OK')
+        refresh = RefreshToken.for_user(user)
+        res = {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token)
+        }
+        return response.Response(res)
     else:
         return response.Response('Invalid')
+
+
+class UserDetailView(generics.RetrieveUpdateAPIView):
+    serializer_class = UserEditSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        serializer = self.serializer_class(request.user)
+        print("USER SERIALIESR", serializer)
+        return response.Response(serializer.data, status=status.HTTP_200_OK)
+

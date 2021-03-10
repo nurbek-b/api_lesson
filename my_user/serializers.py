@@ -28,4 +28,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return attrs
 
 
-
+class UserEditSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'phone']

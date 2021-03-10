@@ -60,3 +60,5 @@ class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = AdImage
         fields = ('image', 'description', 'id', 'advertisement')
+
+

@@ -19,10 +19,11 @@ class CompanyView(generics.ListAPIView):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
     pagination_class = ListPagination
+    permission_classes = [IsAuthenticated]
     lookup_field = 'pk'
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
-    filterset_fields = ('company_name', 'address', 'owner__username')
-    search_fields = ('company_name', 'address', 'owner__username')
+    filterset_fields = ('company_name', 'address', 'owner__email')
+    search_fields = ('company_name', 'address', 'owner__email')
 
 
 class CompanyCreate(generics.CreateAPIView):
